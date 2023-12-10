@@ -1,0 +1,13 @@
+{
+  "conditions":
+    {
+      "dxcc":3,
+      "spotterContinent":"EU",
+      "mode":"ssb",
+      "band":["40m","20m"]
+    },
+  "comment":"Comment",
+  "actions":["app"],
+  "options":{}
+}
+
