@@ -18,11 +18,11 @@
 ### and copy the session ID from the browsers cookie store
 
 $wanted_bands = "40m","20m","15m","10m"
-$sessionID = 'Insert cooke sesseion ID here'
-$jsonTemplate = 'Path to the JSON templace'
-$dxccReferenceFile = 'Path to the dxcc reference file'
-$adifFile = 'Path to your logfile'
-$mode = "cw"
+$sessionID = 'session ID from cookie'
+$jsonTemplate = 'path to json.txt'
+$dxccReferenceFile = 'path to dxcc.csv'
+$adifFile = 'path to your logfile in adi'
+$mode = "ssb"
 
 ### I strongly recommend to test the script first,
 ### before firing the web requests to the server.
@@ -78,7 +78,6 @@ foreach ($line in $data)
 
 ### sort worked records
 $worked = $worked | Sort-Object
-$triggercount = 0
 
 ### check all / desired bands for DXCCs
 
@@ -86,7 +85,7 @@ foreach ($band in $wanted_bands)
 {
     [System.Collections.ArrayList]$wanted_dxccs = $dxcc_ref.dxcc
     $trigger = $json.psobject.copy()
-    $json.conditions.mode = $mode
+    $trigger.conditions.mode = $mode
     $trigger.conditions.dxcc = $dxcc_ref.dxcc
     $trigger.conditions.band = $band
     $trigger.comment = $band
@@ -100,12 +99,13 @@ foreach ($band in $wanted_bands)
         {
             $wanted_dxccs.Remove($worked_dxcc.dxcc)
         }
-        $trigger.conditions.dxcc = $wanted_dxccs
+
     }
+    ### Convert dxccs from string to integer
+    [int[]] $trigger.conditions.dxcc = $trigger.conditions.dxcc
     if ($trigger.conditions.dxcc.Count -gt 0)
     {
         $body = $trigger | ConvertTo-Json
-	$body
         ### Uncomment next line to send the request to the server
         #Invoke-WebRequest -Uri $url -WebSession $session -Method Post -ContentType 'application/json' -Body $body
     }
