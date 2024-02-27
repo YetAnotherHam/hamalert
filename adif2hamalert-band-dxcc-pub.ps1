@@ -100,6 +100,8 @@ foreach ($band in $wanted_bands)
             $wanted_dxccs.Remove($worked_dxcc.dxcc)
         }
 
+        $trigger.conditions.dxcc = $wanted_dxccs
+
     }
     ### Convert dxccs from string to integer
     [int[]] $trigger.conditions.dxcc = $trigger.conditions.dxcc
